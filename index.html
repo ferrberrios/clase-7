@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>ELECTIVOS DE DISEÑO</title>
+        <style>
+            *, *::before, *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            :root {
+                --color-oscurisimo: #800a49;
+                --color-oscuro: #bf0f6d;
+                --color-normal: blue;
+                --color-iluminado: pink;
+                --color-iluminadisimo: lightpink;
+            }
+
+            body {
+                font-family: Helvetica, Arial, sans-serif;
+                color: var(--color-normal);
+                text-align: center;
+                font-size: 100%;
+            }
+            div#contenedor {
+                margin: 1rem auto;
+                width: 90%;
+                max-width: 780px;
+            }
+
+            h1 {
+                margin: 1rem 0;
+                font-weight: 400;
+                font-size: calc(100% + 3vw + 3vh);
+            }
+
+            h2 {
+                margin: 3rem 0;
+                font-weight: 400;
+                letter-spacing: 0.25rem;
+                font-size: calc(100% + 1vw + 1vh);
+                color: var(--color-oscuro);
+            }
+
+            input {
+                border: 0.1rem solid var(--color-iluminado);
+                padding: 0.5rem 1rem;
+                font-family: inherit;
+                font-size: 15px;
+                color: var(--color-oscuro);
+                outline: none;
+                margin-bottom: 1.5rem;
+                width: 100%;
+                display: block;
+                background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="red"><path d="M92.68,47A13.28,13.28,0,0,1,79.4,60.17H27.49c-11.19,0-20.17-9.71-20.17-20A20.26,20.26,0,0,1,27.61,20.08a19.49,19.49,0,0,1,4.68.61,13.42,13.42,0,0,1,12.79-10,13.25,13.25,0,0,1,13.28,13v.12a24.62,24.62,0,0,1,3.08-.25,17.5,17.5,0,0,1,16,10.46,10.81,10.81,0,0,1,2-.12A13.33,13.33,0,0,1,92.68,47ZM38.93,83.91a3.36,3.36,0,0,1-.86,4.68,3.17,3.17,0,0,1-2,.74,3.56,3.56,0,0,1-2.7-1.48l-8.74-12.3a3.42,3.42,0,0,1,.62-4.67,3.27,3.27,0,0,1,4.79.73Zm21.65,0a3.22,3.22,0,0,1-.74,4.68,3.48,3.48,0,0,1-2,.74A4,4,0,0,1,55,87.85l-8.73-12.3a3.23,3.23,0,0,1,.86-4.67,3.16,3.16,0,0,1,4.68.73Zm21.77,0a3.22,3.22,0,0,1-.74,4.68,4.28,4.28,0,0,1-2,.74,3.56,3.56,0,0,1-2.7-1.48l-8.86-12.3a3.34,3.34,0,0,1,.74-4.67,3.3,3.3,0,0,1,4.8.73Z"></path></svg>');
+                background-repeat: no-repeat;
+                background-size: 1rem;
+                background-position: 99% center;
+            }
+
+            input::placeholder {
+                color: var(--color-iluminado);
+            }
+
+            input:focus {
+                border-color: var(--color-normal);
+            }
+
+            div#contenedordetabla {
+                overflow-x: auto;
+                font-size: 90%;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                text-align: left;
+                margin-bottom: 3rem;
+            }
+
+            thead {
+                background: var(--color-iluminado);
+            }
+
+            td,
+            th {
+                border: 1px solid var(--color-normal);
+                padding: 0.75rem;
+            }
+
+            td:nth-child(1),
+            th:nth-child(1),
+            td:nth-child(3),
+            th:nth-child(3) {
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="contenedor">
+            <h1>ᕙ( •̀ ᗜ •́ )ᕗ</h1>
+            <h2>ELECTIVOS DE DISEÑO</h2>
+
+            <input type="text" id="elInput" placeholder="Filtrar electivos…" />
+            <div id="contenedordetabla">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Asignatura electiva</th>
+                            <th>Mención</th>
+                            <th>Grupo</th>
+                            <th>Enfoque</th>
+                        </tr>
+                    </thead>
+                    <tbody id="este"></tbody>
+                </table>
+            </div>
+            <small>Diseño y visualización de información</small>
+        </div>
+
+        <script>
+            const t = document.querySelector("#este");
+            const URL = "https://api.myjson.online/v1/records/f11e506a-bf97-47a2-b542-e88fe42b8d1b";
+
+            fetch(URL)
+                .then((respuesta) => {
+                    if (!respuesta.ok) {
+                        throw new Error("Error HTTP: " + respuesta.status);
+                    }
+                    return respuesta.json();
+                })
+                .then((datos) => {
+                    var trabajo = datos.data;
+                    console.log(trabajo);
+                    trabajo.forEach((x) => {
+                        t.innerHTML += `<tr style="${x.ok == 1 ? "background-color: var(--color-iluminadisimo); color: var(--color-oscurisimo)" : ""}"><td>${x.id}</td><td>${x.name}</td><td>${x.track}</td><td>${x.group}</td><td>${x.focus}</td></tr>`;
+                    });
+                })
+                .catch((error) => {
+                    console.error("Algo salió mal:", error);
+                });
+
+            function sinAcentos(str) {
+                return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            }
+
+            document.getElementById("elInput").addEventListener("keyup", function () {
+                const valor = sinAcentos(this.value.toLowerCase());
+                document.querySelectorAll("#este tr").forEach(function (fila) {
+                    fila.style.display = sinAcentos(fila.textContent.toLowerCase()).includes(valor) ? "" : "none";
+                });
+            });
+        </script>
+    </body>
+</html>
